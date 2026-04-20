@@ -4,7 +4,6 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './web/src'),
@@ -13,8 +12,16 @@ export default defineConfig({
 
   server: {
     proxy: {
-      '/api': 'http://localhost:8000',
-      '/uploads': 'http://localhost:8000',
+      '/api': {
+        target: 'http://localhost',
+        changeOrigin: false,
+        rewrite: (path) => '/Salamass' + path,
+      },
+      '/uploads': {
+        target: 'http://localhost',
+        changeOrigin: false,
+        rewrite: (path) => '/Salamass' + path,
+      },
     },
   },
 })

@@ -163,7 +163,7 @@ export default function LeadCaptureForm({ language = 'vi', formId }) {
         formData.append('files', file);
       });
 
-      const res = await fetch(`${API_BASE_URL}/api/leads.php`, {
+      const res = await fetch(`${API_BASE_URL}/api/leads`, {
         method: 'POST',
         body: formData,
       });

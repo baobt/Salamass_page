@@ -9,24 +9,11 @@ require_once __DIR__ . '/env.php';
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 
 function handleCors(): void {
-    $allowedOrigins = [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        env('CLIENT_URL'),
-        env('ADMIN_URL'),
-    ];
-
-    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-
-    if (in_array($origin, $allowedOrigins, true)) {
-        header("Access-Control-Allow-Origin: $origin");
-    }
-
+  header("Access-Control-Allow-Origin: http://localhost:5173");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-    // Preflight
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         http_response_code(204);
         exit;

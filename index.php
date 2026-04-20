@@ -18,13 +18,17 @@ require_once __DIR__ . '/config/database.php';
 // ─── One-time bootstrap ───────────────────────────────────────────────────────
 
 initDatabase();
-seedDefaultContent();
+seedDefaultContentIfEmpty();
 seedAdminAccount();
 
 // ─── Route the request ────────────────────────────────────────────────────────
 
-$uri  = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri  = '/' . ltrim($uri, '/');
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$base = '/Salamass';
+if (str_starts_with($uri, $base)) {
+    $uri = substr($uri, strlen($base));
+}
+$uri = '/' . ltrim($uri, '/');
 
 // Serve uploaded files as static assets
 if (str_starts_with($uri, '/uploads/')) {
@@ -41,6 +45,7 @@ if (str_starts_with($uri, '/uploads/')) {
 
 // Map URL → handler file
 $routes = [
+    '/api/debug'        => __DIR__ . '/api/debug.php',
     '/api/health'       => __DIR__ . '/api/health.php',
     '/api/leads'        => __DIR__ . '/api/leads.php',
     '/api/login'        => __DIR__ . '/api/login.php',
@@ -59,7 +64,12 @@ jsonResponse(['success' => false, 'message' => 'Not found'], 404);
 
 // ─── Seed functions ───────────────────────────────────────────────────────────
 
-function seedDefaultContent(): void {
+function seedDefaultContentIfEmpty(): void {
+    $rows = dbQuery('SELECT COUNT(*) as cnt FROM content_entries');
+    $count = (int)($rows[0]['cnt'] ?? 0);
+    
+    if ($count > 0) return; // đã có data, không seed lại
+    
     $defaultContent = require __DIR__ . '/data/defaultContent.php';
     $items = flattenContent($defaultContent);
 
@@ -74,6 +84,22 @@ function seedDefaultContent(): void {
         }
     });
 }
+
+// function seedDefaultContent(): void {
+//     $defaultContent = require __DIR__ . '/data/defaultContent.php';
+//     $items = flattenContent($defaultContent);
+
+//     withTransaction(function (PDO $pdo) use ($items) {
+//         $stmt = $pdo->prepare("
+//             INSERT INTO content_entries (language, content_key, content_value)
+//             VALUES (?, ?, ?)
+//             ON DUPLICATE KEY UPDATE content_value = VALUES(content_value)
+//         ");
+//         foreach ($items as $item) {
+//             $stmt->execute([$item['language'], $item['contentKey'], $item['contentValue']]);
+//         }
+//     });
+// }
 
 function seedAdminAccount(): void {
     $email    = env('ADMIN_EMAIL');

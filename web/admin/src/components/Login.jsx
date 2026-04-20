@@ -9,8 +9,7 @@ export default function Login({ onLoginSuccess }) {
   const [showPassword, setShowPassword] = useState(false);
 
   // FIX: luôn trỏ về backend PHP (không phụ thuộc Vite proxy)
-  const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const API_BASE_URL = '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +17,7 @@ export default function Login({ onLoginSuccess }) {
     if (!email.trim() || !password.trim()) return;
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/login.php`, {
+      const res = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

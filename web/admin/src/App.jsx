@@ -5,8 +5,7 @@ import { Button } from './components/ui/button.jsx';
 import { Input } from './components/ui/input.jsx';
 import { EDITABLE_GROUPS } from './config/editableGroups';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = '';
 const LANG_OPTIONS = ['vi', 'en', 'km'];
 
 /* ================= CONTENT EDITOR ================= */
@@ -26,7 +25,7 @@ function ContentEditor({ content, onChange, selectedLanguage }) {
     formData.append("file", file);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/upload-image.php`, {
+      const res = await fetch(`${API_BASE_URL}/api/upload-image`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -135,7 +134,7 @@ function Dashboard() {
   const fetchLeads = async () => {
     const token = localStorage.getItem('token');
 
-    const res = await fetch(`${API_BASE_URL}/api/leads.php`, {
+    const res = await fetch(`${API_BASE_URL}/api/leads`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token || ''}`,
@@ -150,7 +149,7 @@ function Dashboard() {
   const fetchContent = async () => {
     const token = localStorage.getItem('token');
 
-    const res = await fetch(`${API_BASE_URL}/api/content.php`, {
+    const res = await fetch(`${API_BASE_URL}/api/content`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token || ''}`,
@@ -184,7 +183,7 @@ function Dashboard() {
     try {
       const token = localStorage.getItem('token');
 
-      const res = await fetch(`${API_BASE_URL}/api/content.php`, {
+      const res = await fetch(`${API_BASE_URL}/api/content`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -41,6 +41,9 @@ import trungNguyenImage from '../../../images/images_partners/TrungNguyen.jpg';
 import viImage from '../../../images/images_partners/Vi.jpg';
 import vissanImage from '../../../images/images_partners/Vissan.jpg';
 
+
+
+
 function SectionTitle({ title, description }) {
   return (
     <div className="mx-auto mb-8 max-w-2xl text-center">
@@ -61,7 +64,7 @@ function HomePage() {
 
   const fetchCmsContent = async () => {
     try {
-      const response = await fetch('/api/content.php', {
+      const response = await fetch('/api/content', {
         signal: controller.signal,
       });
 

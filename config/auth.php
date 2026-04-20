@@ -68,7 +68,11 @@ function jwtVerify(string $token): array {
  * sends 401 and exits.
  */
 function requireAuth(): array {
-    $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $header = $_SERVER['HTTP_AUTHORIZATION'] 
+    ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] 
+    ?? getallheaders()['Authorization'] 
+    ?? getallheaders()['authorization'] 
+    ?? '';
 
     if ($header === '') {
         jsonResponse(['message' => 'No token'], 401);
